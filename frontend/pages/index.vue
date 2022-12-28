@@ -1,27 +1,31 @@
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4 min-h-screen">
     <div class="sticky top-0 shadow z-50">
-      <div class="p-4 bg-white font-mono h-60px">
-        <span class="bg-teal-500 text-white rounded-md p-1">Checking Tool</span>
+      <div class="flex justify-between items-center px-3 bg-white h-60px">
+        <div class="p-4 font-mono">
+          <span class="bg-teal-500 text-white rounded-md p-1"
+            >Checking Tool</span
+          >
+        </div>
       </div>
     </div>
-    <div class="flex gap-4 p-4 max-w-6xl mx-auto">
+    <div class="flex flex-1 justify-center gap-3 p-4 max-w-6xl mx-auto">
       <ErrorList
         title="Unresolved"
         :errors="unresolved"
-        :action="{ icon: 'check', tooltip: 'Resolve' }"
+        :action="{ icon: 'check', label: 'Resolve' }"
         @error-action="resolve"
       />
       <ErrorList
         title="Resolved"
         :errors="resolved"
-        :action="{ icon: 'xmark', tooltip: 'Unresolve' }"
+        :action="{ icon: 'xmark', label: 'Unresolve' }"
         @error-action="unresolve"
       />
       <ErrorList
         title="Backlog"
         :errors="backlog"
-        :action="{ icon: 'plus', tooltip: 'Activate' }"
+        :action="{ icon: 'plus', label: 'Activate' }"
         @error-action="activate"
       />
     </div>

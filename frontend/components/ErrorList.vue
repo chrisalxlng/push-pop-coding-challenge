@@ -10,20 +10,24 @@ export default {
 <template>
   <div>
     <div class="bg-gray-100 rounded-md shadow">
-      <div class="sticky py-3 bg-gray-100 top-60px">
-        <h4 class="px-4 font-bold">{{ title }}</h4>
+      <div class="sticky py-3 bg-gray-100 top-60px z-40">
+        <h4 class="px-3 font-bold">{{ title }} ({{ errors.length }})</h4>
       </div>
-      <div class="p-4 flex flex-col gap-3">
-        <div v-for="error in errors" :key="error.index">
-          <ErrorListElement
-            @error-action="$emit('error-action', $event)"
-            :index="error.index"
-            :code="error.code"
-            :text="error.text"
-            :action="action"
-          />
+      <div v-if="errors.length">
+        <div class="p-3 flex flex-col gap-3">
+          <div v-for="error in errors" :key="error.index">
+            <ErrorListElement
+              class="w-295px"
+              @error-action="$emit('error-action', $event)"
+              :index="error.index"
+              :code="error.code"
+              :text="error.text"
+              :action="action"
+            />
+          </div>
         </div>
       </div>
+      <div v-else><div class="p-3 w-295px">No items available.</div></div>
     </div>
   </div>
 </template>
