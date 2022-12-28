@@ -33,7 +33,9 @@ export default {
    */
   buildModules: [
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
-    "@nuxtjs/tailwindcss"
+    "@nuxtjs/tailwindcss",
+    // See https://fontawesome.com/docs/web/use-with/vue/use-with
+    "@nuxtjs/fontawesome"
   ],
   /*
    ** Nuxt.js modules
@@ -47,6 +49,16 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {},
+  /*
+   ** Fontawesome module configuration
+   */
+  fontawesome: {
+    component: "Fa",
+    suffix: false,
+    icons: {
+      solid: true
+    }
+  },
   /*
    ** Build configuration
    */

@@ -2,7 +2,7 @@
 import ErrorListElement from "./ErrorListElement.vue";
 
 export default {
-  props: ["title", "errors"],
+  props: ["title", "errors", "action"],
   components: { ErrorListElement }
 };
 </script>
@@ -15,7 +15,13 @@ export default {
       </div>
       <div class="p-4 flex flex-col gap-3">
         <div v-for="error in errors" :key="error.index">
-          <ErrorListElement :code="error.code" :text="error.text" />
+          <ErrorListElement
+            @error-action="$emit('error-action', $event)"
+            :index="error.index"
+            :code="error.code"
+            :text="error.text"
+            :action="action"
+          />
         </div>
       </div>
     </div>

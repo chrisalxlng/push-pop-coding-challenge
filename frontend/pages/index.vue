@@ -6,9 +6,24 @@
       </div>
     </div>
     <div class="flex gap-4 p-4 max-w-6xl mx-auto">
-      <ErrorList title="Unresolved" :errors="unresolved" />
-      <ErrorList title="Resolved" :errors="resolved" />
-      <ErrorList title="Backlog" :errors="backlog" />
+      <ErrorList
+        title="Unresolved"
+        :errors="unresolved"
+        :action="{ icon: 'check', tooltip: 'Resolve' }"
+        @error-action="resolve"
+      />
+      <ErrorList
+        title="Resolved"
+        :errors="resolved"
+        :action="{ icon: 'xmark', tooltip: 'Unresolve' }"
+        @error-action="unresolve"
+      />
+      <ErrorList
+        title="Backlog"
+        :errors="backlog"
+        :action="{ icon: 'plus', tooltip: 'Activate' }"
+        @error-action="activate"
+      />
     </div>
     <div class="p-4">
       A coding challenge submission by Christopher Lang for axess Intelligence.
@@ -46,6 +61,32 @@ export default {
       backlog: []
     };
   },
-  components: { ErrorList }
+  components: { ErrorList },
+  methods: {
+    resolve(index) {
+      const errorToResolveIndex = this.unresolved.findIndex(
+        error => error.index === index
+      );
+      const errorToResolve = this.unresolved[errorToResolveIndex];
+      this.unresolved.splice(errorToResolveIndex, 1);
+      this.resolved = [...this.resolved, errorToResolve];
+    },
+    unresolve(index) {
+      const errorToUnresolveIndex = this.resolved.findIndex(
+        error => error.index === index
+      );
+      const errorToUnresolve = this.resolved[errorToUnresolveIndex];
+      this.resolved.splice(errorToUnresolveIndex, 1);
+      this.unresolved = [...this.unresolved, errorToUnresolve];
+    },
+    activate(index) {
+      const errorToActivateIndex = this.backlog.findIndex(
+        error => error.index === index
+      );
+      const errorToActivate = this.backlog[errorToActivateIndex];
+      this.backlog.splice(errorToActivateIndex, 1);
+      this.unresolved = [...this.unresolved, errorToActivate];
+    }
+  }
 };
 </script>
