@@ -51,7 +51,7 @@ _frontend_
 _backend_
 
 - [x] write a logging functionality, that counts how many requests for errors are received (you can store these numbers in memory, no persistent storage required)
-- [ ] implement the code of the `get_list_intersection_counts` function endpoint. You can find it in `_api.py`, it contains an extensive documentation string, that should define the problem well.
+- [x] implement the code of the `get_list_intersection_counts` function endpoint. You can find it in `_api.py`, it contains an extensive documentation string, that should define the problem well.
 
 This is the absolute minimum our operators and their managers need, in order to resolve errors effectively. If you still have time/if you're still willing, you may start on the `version two` - this will enable our operators to resolve errors _effectively_ (frontend version two) and us to check the system for systematic errors (api version two).
 
