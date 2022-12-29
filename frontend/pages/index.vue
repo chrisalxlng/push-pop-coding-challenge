@@ -7,6 +7,24 @@
             >Checking Tool</span
           >
         </div>
+        <button
+          :disabled="isDisabled"
+          :class="`${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} p-2`"
+          @click="undo"
+        >
+          <Fa
+            :class="isDisabled ? 'text-gray-500' : 'text-teal-500'"
+            :icon="['fas', 'rotate-left']"
+          />
+          <span
+            :class="
+              `${
+                isDisabled ? 'text-gray-500' : 'text-teal-500'
+              } text-sm font-medium`
+            "
+            >Undo last action</span
+          >
+        </button>
       </div>
     </div>
     <div class="flex flex-1 justify-center gap-3 p-4 max-w-6xl mx-auto">
@@ -62,11 +80,25 @@ export default {
     return {
       resolved: [],
       unresolved: [],
-      backlog: []
+      backlog: [],
+      lastAction: { inverseAction: null, index: null }
     };
+  },
+  computed: {
+    isDisabled() {
+      return !this.lastAction.inverseAction || isNaN(this.lastAction.index);
+    }
   },
   components: { ErrorList },
   methods: {
+    updateLastAction(inverseAction, index) {
+      this.lastAction = { inverseAction, index };
+    },
+    undo() {
+      const { inverseAction, index } = this.lastAction;
+      inverseAction(index);
+      this.updateLastAction(null, null);
+    },
     resolve(index) {
       const errorToResolveIndex = this.unresolved.findIndex(
         error => error.index === index
@@ -74,6 +106,7 @@ export default {
       const errorToResolve = this.unresolved[errorToResolveIndex];
       this.unresolved.splice(errorToResolveIndex, 1);
       this.resolved = [...this.resolved, errorToResolve];
+      this.updateLastAction(this.unresolve, index);
     },
     unresolve(index) {
       const errorToUnresolveIndex = this.resolved.findIndex(
@@ -82,6 +115,7 @@ export default {
       const errorToUnresolve = this.resolved[errorToUnresolveIndex];
       this.resolved.splice(errorToUnresolveIndex, 1);
       this.unresolved = [...this.unresolved, errorToUnresolve];
+      this.updateLastAction(this.resolve, index);
     },
     activate(index) {
       const errorToActivateIndex = this.backlog.findIndex(
@@ -90,6 +124,16 @@ export default {
       const errorToActivate = this.backlog[errorToActivateIndex];
       this.backlog.splice(errorToActivateIndex, 1);
       this.unresolved = [...this.unresolved, errorToActivate];
+      this.updateLastAction(this.unactivate, index);
+    },
+    unactivate(index) {
+      const errorToUnactivateIndex = this.unresolved.findIndex(
+        error => error.index === index
+      );
+      const errorToUnactivate = this.unresolved[errorToUnactivateIndex];
+      this.unresolved.splice(errorToUnactivateIndex, 1);
+      this.backlog = [...this.backlog, errorToUnactivate];
+      this.updateLastAction(this.activate, index);
     }
   }
 };

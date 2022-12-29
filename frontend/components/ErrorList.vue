@@ -27,7 +27,11 @@ export default {
           </div>
         </div>
       </div>
-      <div v-else><div class="p-3 w-295px">No items available.</div></div>
+      <div v-else>
+        <div class="px-3">
+          <div class="py-3 w-295px">No items available.</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
