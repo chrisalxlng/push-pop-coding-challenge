@@ -7,9 +7,13 @@ from fastapi import FastAPI
 import uvicorn
 
 ERROR_CODES = [error_code for error_code in range(50)]
+logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 LOGGER = logging.getLogger("API")
-app = FastAPI()
 
+# globals
+request_count = 0
+
+app = FastAPI()
 
 def _generate_lists() -> Dict[str, Any]:
     """Generate resolved, unresolved and backlog lists."""
@@ -36,6 +40,12 @@ def _generate_lists() -> Dict[str, Any]:
 def get_lists() -> Dict[str, Any]:
     """Return resolved, unresolved and backlog lists."""
     LOGGER.info('Generating resolved, unresolved and backlog lists.')
+    global request_count
+    request_count += 1
+    if (request_count == 1):
+        LOGGER.info('%d error request received.' % request_count)
+    else:
+        LOGGER.info('%d error requests received.' % request_count)
     return _generate_lists()
 
 
