@@ -3,28 +3,16 @@
     <div class="sticky top-0 shadow z-50">
       <div class="flex justify-between items-center px-3 bg-white h-60px">
         <div class="p-4 font-mono">
-          <span class="bg-teal-500 text-white rounded-md p-1"
+          <span :class="`bg-${primaryColor} text-white rounded-md p-1`"
             >Checking Tool</span
           >
         </div>
-        <button
-          :disabled="isDisabled"
-          :class="`${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} p-2`"
+        <Button
           @click="undo"
-        >
-          <Fa
-            :class="isDisabled ? 'text-gray-500' : 'text-teal-500'"
-            :icon="['fas', 'rotate-left']"
-          />
-          <span
-            :class="
-              `${
-                isDisabled ? 'text-gray-500' : 'text-teal-500'
-              } text-sm font-medium`
-            "
-            >Undo last action</span
-          >
-        </button>
+          label="Undo last action"
+          icon="rotate-left"
+          :isDisabled="isDisabled"
+        />
       </div>
     </div>
     <div class="flex flex-1 justify-center gap-3 p-4 max-w-6xl mx-auto">
@@ -55,6 +43,8 @@
 
 <script>
 import ErrorList from "../components/ErrorList.vue";
+import Button from "../components/Button.vue";
+import { PRIMARY } from "~/assets/js/colors";
 
 export default {
   async asyncData({ $axios }) {
@@ -81,7 +71,8 @@ export default {
       resolved: [],
       unresolved: [],
       backlog: [],
-      lastAction: { inverseAction: null, index: null }
+      lastAction: { inverseAction: null, index: null },
+      primaryColor: PRIMARY
     };
   },
   computed: {
@@ -89,7 +80,7 @@ export default {
       return !this.lastAction.inverseAction || isNaN(this.lastAction.index);
     }
   },
-  components: { ErrorList },
+  components: { Button, ErrorList },
   methods: {
     updateLastAction(inverseAction, index) {
       this.lastAction = { inverseAction, index };

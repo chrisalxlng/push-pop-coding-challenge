@@ -58,8 +58,8 @@ This is the absolute minimum our operators and their managers need, in order to 
 _frontend version two_
 
 - [ ] make the UI/UX better
-  - [ ] shadows,
-  - [ ] click, hover animations (e.g. changing to a darker shade of said color)
+  - [x] shadows,
+  - [x] click, hover animations (e.g. changing to a darker shade of said color)
   - [ ] notifications
   - [ ] mobile layout
   - [ ] ...

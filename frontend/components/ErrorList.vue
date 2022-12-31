@@ -2,7 +2,11 @@
 import ErrorListElement from "./ErrorListElement.vue";
 
 export default {
-  props: ["title", "errors", "action"],
+  props: {
+    title: { type: String, required: true },
+    errors: { type: Array, required: true },
+    action: { type: Object, required: true }
+  },
   components: { ErrorListElement }
 };
 </script>
