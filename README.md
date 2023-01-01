@@ -63,9 +63,9 @@ _frontend version two_
   - [ ] notifications
   - [ ] mobile layout
   - [ ] ...
-- [ ] make the undo functionality better
-  - [ ] the user should be able to undo _all_ of his actions
-  - [ ] when a user clicks undo, the item that switches lists should be in the same position as before (e.g., if the user resolved an error that was in the middle of the list at position 4, it should also re-appear at position 4 if he undoes this action)
+- [x] make the undo functionality better
+  - [x] the user should be able to undo _all_ of his actions
+  - [x] when a user clicks undo, the item that switches lists should be in the same position as before (e.g., if the user resolved an error that was in the middle of the list at position 4, it should also re-appear at position 4 if he undoes this action)
 
 _api version two_
 

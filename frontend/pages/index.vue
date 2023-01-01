@@ -71,60 +71,124 @@ export default {
       resolved: [],
       unresolved: [],
       backlog: [],
-      lastAction: { inverseAction: null, index: null },
+      lastActions: [],
       primaryColor: PRIMARY
     };
   },
   computed: {
     isDisabled() {
-      return !this.lastAction.inverseAction || isNaN(this.lastAction.index);
+      return !this.lastActions.length;
     }
   },
   components: { Button, ErrorList },
   methods: {
-    updateLastAction(inverseAction, index) {
-      this.lastAction = { inverseAction, index };
+    updateLastActions(inverseAction, originPosition, destinationPosition) {
+      this.lastActions.push({
+        inverseAction,
+        originPosition,
+        destinationPosition
+      });
     },
     undo() {
-      const { inverseAction, index } = this.lastAction;
-      inverseAction(index);
-      this.updateLastAction(null, null);
+      if (!this.lastActions.length) return;
+      const {
+        inverseAction,
+        originPosition,
+        destinationPosition
+      } = this.lastActions.pop();
+      inverseAction(destinationPosition, originPosition);
+    },
+    moveErrorFromUnresolvedToResolved(unresolvedPosition, resolvedPosition) {
+      const error = this.unresolved[unresolvedPosition];
+      this.unresolved.splice(unresolvedPosition, 1);
+
+      const updatedResolved = [...this.resolved];
+      updatedResolved.splice(resolvedPosition, 0, error);
+      this.resolved = updatedResolved;
     },
     resolve(index) {
-      const errorToResolveIndex = this.unresolved.findIndex(
+      const unresolvedPosition = this.unresolved.findIndex(
         error => error.index === index
       );
-      const errorToResolve = this.unresolved[errorToResolveIndex];
-      this.unresolved.splice(errorToResolveIndex, 1);
-      this.resolved = [...this.resolved, errorToResolve];
-      this.updateLastAction(this.unresolve, index);
+
+      this.moveErrorFromUnresolvedToResolved(
+        unresolvedPosition,
+        this.resolved.length
+      );
+
+      const resolvedPosition = this.resolved.findIndex(
+        error => error.index === index
+      );
+
+      this.updateLastActions(
+        this.moveErrorFromResolvedToUnresolved,
+        unresolvedPosition,
+        resolvedPosition
+      );
+    },
+    moveErrorFromResolvedToUnresolved(resolvedPosition, unresolvedPosition) {
+      const error = this.resolved[resolvedPosition];
+      this.resolved.splice(resolvedPosition, 1);
+
+      const updatedUnresolved = [...this.unresolved];
+      updatedUnresolved.splice(unresolvedPosition, 0, error);
+      this.unresolved = updatedUnresolved;
     },
     unresolve(index) {
-      const errorToUnresolveIndex = this.resolved.findIndex(
+      const resolvedPosition = this.resolved.findIndex(
         error => error.index === index
       );
-      const errorToUnresolve = this.resolved[errorToUnresolveIndex];
-      this.resolved.splice(errorToUnresolveIndex, 1);
-      this.unresolved = [...this.unresolved, errorToUnresolve];
-      this.updateLastAction(this.resolve, index);
+
+      this.moveErrorFromResolvedToUnresolved(
+        resolvedPosition,
+        this.unresolved.length
+      );
+
+      const unresolvedPosition = this.unresolved.findIndex(
+        error => error.index === index
+      );
+
+      this.updateLastActions(
+        this.moveErrorFromUnresolvedToResolved,
+        resolvedPosition,
+        unresolvedPosition
+      );
+    },
+    moveErrorFromBacklogToUnresolved(backlogPosition, unresolvedPosition) {
+      const error = this.backlog[backlogPosition];
+      this.backlog.splice(backlogPosition, 1);
+
+      const updatedUnresolved = [...this.unresolved];
+      updatedUnresolved.splice(unresolvedPosition, 0, error);
+      this.unresolved = updatedUnresolved;
     },
     activate(index) {
-      const errorToActivateIndex = this.backlog.findIndex(
+      const backlogPosition = this.backlog.findIndex(
         error => error.index === index
       );
-      const errorToActivate = this.backlog[errorToActivateIndex];
-      this.backlog.splice(errorToActivateIndex, 1);
-      this.unresolved = [...this.unresolved, errorToActivate];
-      this.updateLastAction(this.unactivate, index);
+
+      this.moveErrorFromBacklogToUnresolved(
+        backlogPosition,
+        this.unresolved.length
+      );
+
+      const unresolvedPosition = this.unresolved.findIndex(
+        error => error.index === index
+      );
+
+      this.updateLastActions(
+        this.moveErrorFromUnresolvedToBacklog,
+        backlogPosition,
+        unresolvedPosition
+      );
     },
-    unactivate(index) {
-      const errorToUnactivateIndex = this.unresolved.findIndex(
-        error => error.index === index
-      );
-      const errorToUnactivate = this.unresolved[errorToUnactivateIndex];
-      this.unresolved.splice(errorToUnactivateIndex, 1);
-      this.backlog = [...this.backlog, errorToUnactivate];
-      this.updateLastAction(this.activate, index);
+    moveErrorFromUnresolvedToBacklog(unresolvedPosition, backlogPosition) {
+      const error = this.unresolved[unresolvedPosition];
+      this.unresolved.splice(unresolvedPosition, 1);
+
+      const updatedBacklog = [...this.backlog];
+      updatedBacklog.splice(backlogPosition, 0, error);
+      this.backlog = updatedBacklog;
     }
   }
 };
