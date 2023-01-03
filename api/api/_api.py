@@ -12,6 +12,7 @@ LOGGER = logging.getLogger("API")
 
 # globals
 request_count = 0
+requests = []
 
 app = FastAPI()
 
@@ -37,15 +38,30 @@ def _generate_lists() -> Dict[str, Any]:
 
 
 @app.get("/get_lists")
-def get_lists() -> Dict[str, Any]:
+def get_lists(operator_name: str) -> Dict[str, Any]:
     """Return resolved, unresolved and backlog lists."""
     LOGGER.info('Generating resolved, unresolved and backlog lists.')
-    global request_count
+    global request_count, requests
+
     request_count += 1
     if (request_count == 1):
         LOGGER.info('%d error request received.' % request_count)
     else:
         LOGGER.info('%d error requests received.' % request_count)
+    
+    operator_names = [operator['operator_name'] for operator in requests]
+    if (operator_name in operator_names):
+        index = operator_names.index(operator_name)
+        requests[index] = { 'operator_name': operator_name, 'request_count': requests[index]['request_count'] + 1 }
+    else:
+        requests.append({ 'operator_name': operator_name, 'request_count': 1 })
+    for request in requests:
+        name, count = request['operator_name'], request['request_count']
+        if (count == 1):
+            LOGGER.info('%s has requested errors %d time.', name, count)
+        else:
+            LOGGER.info('%s has requested errors %d times.', name, count)
+
     return _generate_lists()
 
 
