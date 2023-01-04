@@ -58,7 +58,7 @@ export default {
   <div>
     <div class="bg-gray-100 rounded-md shadow relative">
       <div
-        class="absolute bottom-0 h-16 w-full z-10 rounded-b-md bg-gradient-to-b from-transparent to-gray-100"
+        class="lg:hidden absolute bottom-0 h-16 w-full z-10 rounded-b-md bg-gradient-to-b from-transparent to-gray-100"
       ></div>
       <div
         class="sticky py-3 bg-gray-100 top-60px z-40 rounded-b-md flex justify-between items-center gap-2 px-1"
