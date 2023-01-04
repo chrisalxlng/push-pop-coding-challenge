@@ -61,7 +61,7 @@ _frontend version two_
   - [x] shadows,
   - [x] click, hover animations (e.g. changing to a darker shade of said color)
   - [ ] notifications
-  - [ ] mobile layout
+  - [x] mobile layout
   - [ ] ...
 - [x] make the undo functionality better
   - [x] the user should be able to undo _all_ of his actions

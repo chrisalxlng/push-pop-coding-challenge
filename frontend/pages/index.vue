@@ -15,7 +15,9 @@
         />
       </div>
     </div>
-    <div class="flex flex-1 justify-center gap-3 p-4 max-w-6xl mx-auto">
+    <div
+      class="flex flex-col lg:flex-row flex-1 justify-center gap-3 p-4 max-w-6xl mx-auto"
+    >
       <ErrorList
         title="Unresolved"
         :errors="unresolved"

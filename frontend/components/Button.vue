@@ -8,12 +8,14 @@
                 ? `text-${disabledColor} cursor-not-allowed`
                 : `text-${primaryColor} hover:text-${primaryColorHover} cursor-pointer`
             }
-              p-2 transform focus:translate-y-px flex items-center gap-1`
+              p-2 transform focus:translate-y-px`
     "
     @click="$emit('click')"
   >
-    <Fa :icon="['fas', icon]" />
-    <span class="text-sm font-medium">{{ label }}</span>
+    <div class=" flex items-center gap-1">
+      <Fa :icon="['fas', icon]" />
+      <span class="text-sm font-medium">{{ label }}</span>
+    </div>
   </button>
 </template>
 
