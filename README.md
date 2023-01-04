@@ -1,3 +1,5 @@
+![Thumbnail](./screenshots/thumbnail.jpeg)
+
 # Coding challenge
 
 Welcome to this fullstack coding challenge. This Readme will guide you through it. It will first present a high level full picture of the project and then scope your task.
